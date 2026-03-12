@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer - Tribal Welfare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4d8b31;
+            --secondary-color: #f98d3f;
+            --accent-color: #8a4f7d;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f9f9f9;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background-color: rgba(77, 139, 49, 0.1);
+        }
+
+        .nav-links a.active {
+            color: white;
+            background-color: var(--primary-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background-image: url("/api/placeholder/1200/400");
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            color: white;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .hero h1, .hero p {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .volunteer-options {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+
+        .volunteer-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .volunteer-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .volunteer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .volunteer-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .volunteer-card h3 i {
+            margin-right: 0.5rem;
+        }
+
+        .volunteer-card ul {
+            list-style-type: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .volunteer-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .volunteer-card li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .volunteer-btn {
+            margin-top: auto;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .volunteer-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .volunteer-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .testimonials {
+            margin-bottom: 3rem;
+        }
+
+        .testimonial-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .testimonial-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--primary-color);
+        }
+
+        .testimonial p {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 992px) {
+            .volunteer-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .testimonial-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            nav h1 {
+                margin-bottom: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .volunteer-cards, .testimonial-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <main>
+        <section class="hero">
+            <h1>Volunteer With Us</h1>
+            <p>Join our mission to empower tribal communities through education, healthcare, and sustainable development</p>
+        </section>
+
+        <section class="volunteer-form">
+            <h2 class="section-title">Volunteer Registration</h2>
+            <form id="volunteerForm">
+                <div class="form-group">
+                    <input type="text" id="name" required placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" required placeholder="Email Address">
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" required placeholder="Phone Number">
+                </div>
+                <div class="form-group">
+                    <select id="volunteerType" required>
+                        <option value="">Select Volunteer Type</option>
+                        <option value="onsite">On-site Volunteer</option>
+                        <option value="virtual">Virtual Volunteer</option>
+                        <option value="event">Event Volunteer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea id="skills" placeholder="Tell us about your skills and experience"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </form>
+        </section>
+
+        <section class="testimonials">
+            <h2 class="section-title">Volunteer Stories</h2>
+            <div class="testimonial-cards">
+                <div class="testimonial">
+                    <img src="spa.png" alt="Volunteer" class="testimonial-img">
+                    <p>"Teaching at tribal schools was the most rewarding experience of my life. The children's enthusiasm to learn despite challenges was truly inspiring."</p>
+                    <h4>- Spandana</h4>
+                </div>
+                <div class="testimonial">
+                    <img src="sam.png" alt="Volunteer" class="testimonial-img">
+                    <p>"The cultural exchange and learning has been incredible. I came to teach but ended up learning so much from the community."</p>
+                    <h4>- Samanvitha</h4>
+                </div>
+                <div class="testimonial">
+                    <img src="shravya.png" alt="Volunteer" class="testimonial-img">
+                    <p>"Helping with healthcare initiatives in tribal areas opened my eyes to both challenges and resilience. The traditional knowledge combined with modern practices creates a powerful impact."</p>
+                    <h4>- Shravya</h4>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Tribal Welfare. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle volunteer form submission
+            const volunteerForm = document.getElementById('volunteerForm');
+            if(volunteerForm) {
+                volunteerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = {
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        volunteerType: document.getElementById('volunteerType').value,
+                        skills: document.getElementById('skills').value
+                    };
+
+                    console.log('Volunteer application submitted:', formData);
+                    alert('Thank you for volunteering! We will contact you soon.');
+                    this.reset();
+                });
+            }
+
+            // Handle volunteer button clicks
+            const volunteerButtons = document.querySelectorAll('.volunteer-btn');
+            volunteerButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const type = this.closest('.volunteer-card').querySelector('h3').textContent;
+                    const section = document.querySelector('.volunteer-form');
+                    if(section) {
+                        section.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Set the volunteer type dropdown based on the button clicked
+                        const volunteerTypeSelect = document.getElementById('volunteerType');
+                        if (type.includes('On-site')) {
+                            volunteerTypeSelect.value = 'onsite';
+                        } else if (type.includes('Virtual')) {
+                            volunteerTypeSelect.value = 'virtual';
+                        } else if (type.includes('Event')) {
+                            volunteerTypeSelect.value = 'event';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

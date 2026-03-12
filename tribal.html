@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Indian Tribes - Hope Nexus</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .search-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            padding: 10px;
+            width: 60%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .tribes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .tribe-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .tribe-card:hover {
+            transform: scale(1.05);
+        }
+        .tribe-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .tribe-card h3 {
+            margin: 10px 0 5px;
+            color: #444;
+        }
+        .tribe-card p {
+            color: #666;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .form-container input, .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container button {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .new-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .tribe-card.highlight {
+            border: 3px solid #ffd166;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 209, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0); }
+        }
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .delete-confirmation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        .delete-confirmation-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+        }
+        .delete-confirmation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .delete-confirmation-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .confirm-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .cancel-delete {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>List of Indian Tribes</h2>
+        
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search tribes..." onkeyup="filterTribes()">
+        </div>
+        
+        <div class="tribes-grid" id="tribesGrid"></div>
+
+        <div class="form-container">
+            <h2>Add Tribal Knowledge</h2>
+            <input type="text" id="tribeName" placeholder="Tribe Name" required>
+            <input type="text" id="tribeLocation" placeholder="Location" required>
+            <textarea id="tribeDescription" placeholder="Describe the tribe's culture, traditions, etc." required></textarea>
+            <input type="file" id="tribeImage" accept="image/*">
+            <button onclick="submitTribe()">Submit</button>
+        </div>
+    </div>
+
+    <div id="notification">Tribe added successfully!</div>
+    
+    <div class="delete-confirmation" id="deleteConfirmation">
+        <div class="delete-confirmation-content">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this tribal entry? This action cannot be undone.</p>
+            <div class="delete-confirmation-buttons">
+                <button class="confirm-delete" id="confirmDelete">Delete</button>
+                <button class="cancel-delete" id="cancelDelete">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Use localStorage to persist data
+        const STORAGE_KEY = 'tribe_data';
+        let indexToDelete = -1;
+        
+        // Load tribes from localStorage or initialize with empty array
+        function loadTribes() {
+            const storedTribes = localStorage.getItem(STORAGE_KEY);
+            return storedTribes ? JSON.parse(storedTribes) : [];
+        }
+        
+        // Save tribes to localStorage
+        function saveTribes(tribes) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tribes));
+        }
+        
+        // Display tribes from localStorage
+        function displayTribes() {
+            const tribes = loadTribes();
+            const tribesGrid = document.getElementById('tribesGrid');
+            tribesGrid.innerHTML = '';
+            
+            tribes.forEach((tribe, index) => {
+                const card = document.createElement('div');
+                card.classList.add('tribe-card');
+                card.setAttribute('data-index', index);
+                
+                // Add highlight class for newly added tribes
+                if (tribe.isNew) {
+                    card.classList.add('highlight');
+                }
+                
+                let imageHtml = '';
+                if (tribe.image) {
+                    imageHtml = `<img src="${tribe.image}" alt="${tribe.name} Tribe">`;
+                } else {
+                    imageHtml = `<img src="https://via.placeholder.com/300x200?text=${encodeURIComponent(tribe.name)}" alt="${tribe.name} Tribe">`;
+                }
+                
+                card.innerHTML = `
+                    <button class="delete-btn" data-index="${index}">×</button>
+                    ${imageHtml}
+                    ${tribe.isNew ? '<span class="new-badge">NEW</span>' : ''}
+                    <h3>${tribe.name}</h3>
+                    <p>Location: ${tribe.location}</p>
+                    <p>${tribe.description}</p>
+                `;
+                
+                tribesGrid.appendChild(card);
+            });
+            
+            // Add event listeners to delete buttons
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent card animation
+                    indexToDelete = parseInt(button.getAttribute('data-index'));
+                    showDeleteConfirmation();
+                });
+            });
+        }
+
+        function submitTribe() {
+            const name = document.getElementById('tribeName').value;
+            const location = document.getElementById('tribeLocation').value;
+            const description = document.getElementById('tribeDescription').value;
+            const imageFile = document.getElementById('tribeImage').files[0];
+            
+            if (!name || !location || !description) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Process image file
+            const processImage = new Promise((resolve) => {
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        resolve(e.target.result); // base64 encoded image
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    resolve(null);
+                }
+            });
+            
+            processImage.then((imageData) => {
+                const tribes = loadTribes();
+                
+                // Create new tribe object
+                const newTribe = {
+                    name,
+                    location,
+                    description,
+                    image: imageData,
+                    isNew: true, // Flag to highlight new entries
+                    dateAdded: new Date().toISOString()
+                };
+                
+                // Add to beginning of array to show new entries first
+                tribes.unshift(newTribe);
+                
+                // Save to localStorage
+                saveTribes(tribes);
+                
+                // Clear form
+                document.getElementById('tribeName').value = '';
+                document.getElementById('tribeLocation').value = '';
+                document.getElementById('tribeDescription').value = '';
+                document.getElementById('tribeImage').value = '';
+                
+                // Display updated tribes
+                displayTribes();
+                
+                // Show notification
+                const notification = document.getElementById('notification');
+                notification.style.display = 'block';
+                notification.textContent = 'Tribe added successfully!';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+                
+                // Remove "new" status after some time
+                setTimeout(() => {
+                    const tribes = loadTribes();
+                    if (tribes.length > 0) {
+                        tribes[0].isNew = false;
+                        saveTribes(tribes);
+                        displayTribes();
+                    }
+                }, 60000); // Remove highlight after 1 minute
+            });
+        }
+
+        function deleteTribe(index) {
+            const tribes = loadTribes();
+            if (index >= 0 && index < tribes.length) {
+                // Remove the tribe at the specified index
+                tribes.splice(index, 1);
+                saveTribes(tribes);
+                
+                // Display updated tribes
+                displayTribes();
+                
+                // Show notification
+                const notification = document.getElementById('notification');
+                notification.style.display = 'block';
+                notification.textContent = 'Tribe deleted successfully!';
+                notification.style.backgroundColor = '#dc3545';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    notification.style.backgroundColor = '#28a745';
+                }, 3000);
+            }
+        }
+
+        function showDeleteConfirmation() {
+            const deleteConfirmation = document.getElementById('deleteConfirmation');
+            deleteConfirmation.style.display = 'flex';
+        }
+
+        function hideDeleteConfirmation() {
+            const deleteConfirmation = document.getElementById('deleteConfirmation');
+            deleteConfirmation.style.display = 'none';
+        }
+
+        function filterTribes() {
+            let input = document.getElementById('search').value.toLowerCase();
+            let cards = document.getElementsByClassName('tribe-card');
+            
+            for (let card of cards) {
+                let name = card.getElementsByTagName('h3')[0].innerText.toLowerCase();
+                let location = card.getElementsByTagName('p')[0].innerText.toLowerCase();
+                let description = card.getElementsByTagName('p')[1].innerText.toLowerCase();
+                
+                if (name.includes(input) || location.includes(input) || description.includes(input)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
+
+        // Initial load
+        document.addEventListener("DOMContentLoaded", () => {
+            displayTribes();
+            
+            // Set up delete confirmation buttons
+            document.getElementById('confirmDelete').addEventListener('click', () => {
+                deleteTribe(indexToDelete);
+                hideDeleteConfirmation();
+            });
+            
+            document.getElementById('cancelDelete').addEventListener('click', () => {
+                hideDeleteConfirmation();
+            });
+        });
+    </script>
+</body>
+</html>
