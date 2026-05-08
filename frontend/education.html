@@ -80,7 +80,7 @@
                 <h2 class="text-2xl font-bold mb-4">✍️ Request Education Support</h2>
                 <p class="mb-4">If you know a child who needs education support, submit their details below:</p>
                 
-                <form id="educationForm" method="POST" action="education.php">
+                <form id="educationForm">
                     <input type="text" class="form-input" placeholder="Child's Name" name="childname" required>
                     <input type="text" class="form-input" placeholder="Location" name="location" required>
                     <input type="text" class="form-input" placeholder="Guardian's Contact Number" name="guaidph" required>
@@ -106,33 +106,37 @@
         <div id="schoolResults" class="mt-4"></div>
     </div>
     
-    <script>
-        function findSchools() {
-            document.getElementById('schoolResults').innerHTML = `<p class="p-3 bg-yellow-100 text-yellow-800 rounded">Searching for nearby schools...</p>`;
-            
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    document.getElementById('schoolResults').innerHTML = `
-                        <div class="p-3 bg-green-100 text-green-800 rounded">
-                            <p>Found 3 schools in your area:</p>
-                            <ul class="mt-2 space-y-1">
-                                <li>🏫 Government High School</li>
-                                <li>🏫 Public Elementary School</li>
-                                <li>🏫 Community Learning Center</li>
-                            </ul>
-                        </div>
-                    `;
-                }, function() {
-                    document.getElementById('schoolResults').innerHTML = `
-                        <p class="p-3 bg-red-100 text-red-800 rounded">Location access denied. Please enable location services.</p>
-                    `;
-                });
-            } else {
-                document.getElementById('schoolResults').innerHTML = `
-                    <p class="p-3 bg-red-100 text-red-800 rounded">Geolocation is not supported by your browser.</p>
-                `;
-            }
-        }
-    </script>
+  <script>
+document.getElementById("educationForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const formData = {
+        childname: document.querySelector('[name="childname"]').value,
+        location: document.querySelector('[name="location"]').value,
+        guaidph: document.querySelector('[name="guaidph"]').value,
+        addinfo: document.querySelector('[name="addinfo"]').value
+    };
+
+    try {
+        const response = await fetch("http://localhost:5000/api/education", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        document.getElementById("educationForm").reset();
+
+    } catch (error) {
+        console.log(error);
+        alert("Error submitting form");
+    }
+});
+</script>
 </body>
 </html>
